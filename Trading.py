@@ -1,8 +1,11 @@
+import yaml
 from matplotlib import pyplot as plt
 from alpha_vantage.timeseries import TimeSeries
 from alpha_vantage.techindicators import TechIndicators
 
-ALPHA_VANTAGE_API = '8419TBA0B4AAB8NS'
+privateData = yaml.load(open('privateData.yaml'), Loader=yaml.FullLoader)
+
+ALPHA_VANTAGE_API = privateData['ALPHA_VANTAGE_API'][0]
 ts = TimeSeries(key = ALPHA_VANTAGE_API, output_format = 'pandas')
 ti = TechIndicators(key = ALPHA_VANTAGE_API, output_format = 'pandas')
 
@@ -10,7 +13,7 @@ ticker = 'TXMD'
 
 #get data from the stock
 data, meta = ts.get_daily(symbol=ticker, outputsize = 'full')
-data_MACD, _ = ti.get_macd(symbol = ticker, interval = 'daily', 
+data_MACD, _ = ti.get_macd(symbol = ticker, interval = 'daily',
 	series_type = 'close', fastperiod = 26, slowperiod = 52, signalperiod = 12)
 data_SMA, _ = ti.get_sma(symbol = ticker, interval = 'daily', series_type = 'close', time_period = '10')
 
